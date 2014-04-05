@@ -61,6 +61,7 @@ public class App {
             
             System.out.print(filteredStations.size());
             System.out.println(" stations remaining");
+            System.out.println("Writing out filtered stations");
             Gson gson = new Gson();
             FileUtils.writeStringToFile(new File(outputPath + "filteredStations.json"), gson.toJson(filteredStations));
             
