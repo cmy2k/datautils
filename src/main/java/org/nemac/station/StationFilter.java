@@ -79,12 +79,12 @@ public class StationFilter {
 
             for (Station station : localStations) {
                 for (String variable : variables) {
-                    String path = String.format(normalsPathFormat, normalsDir, variable, station.getId());
+                    String path = String.format(normalsPathFormat, normalsDir, variable, station.getId().substring(prefix.length()));
                     File test = new File(path);
                     
                     if (!test.exists()) {
                         stations.remove(station);
-                        removalLog.add(String.format(messageFormat, station.getName(), station.getId(), "Normal not found at " + path));
+                        removalLog.add(String.format(messageFormat, station.getName(), station.getId(), "Normals not found"));
                         break;                        
                     }
                 }

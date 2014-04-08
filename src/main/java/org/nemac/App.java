@@ -34,7 +34,7 @@ public class App {
     static {
         // STATION FILTER -------------------
         // should stations be filtered
-        filterStations = false;
+        filterStations = true;
 
         // stations should have at least these variables
         minimumVariables.add("TMIN");
@@ -55,14 +55,14 @@ public class App {
         prefix = "GHCND:";
 
         // path for output
-        outputPath = "output/";
+        outputPath = "processed/";
         
         // NORMALIZER -----------------------
         // should normals be normalized
         normalize = false;
         
         // path to normals, searches directories recursively for dat files
-        normalsDir = "data/normals/";
+        normalsDir = "normals/";
         
         // RECURSIVE DELETE -----------------
         // will delete all dat files from the directory
