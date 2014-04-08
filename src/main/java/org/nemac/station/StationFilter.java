@@ -1,5 +1,6 @@
 package org.nemac.station;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 import org.json.JSONObject;
@@ -8,6 +9,7 @@ import org.nemac.domain.Station;
 public class StationFilter {
 
     private static final String messageFormat = "%s (%s) %s";
+    private static final String normalsPathFormat = "%sNORMAL_%s/%s.csv.gz";
 
     private final Set<Station> filteredStations;
     private final Set<String> removalReason;
@@ -68,6 +70,27 @@ public class StationFilter {
                 }
             }
 
+            return this;
+        }
+        
+        public Filterer hasNormals(Set<String> variables, String normalsDir) {
+            Set<Station> localStations = new HashSet<Station>();
+            localStations.addAll(stations);
+
+            for (Station station : localStations) {
+                for (String variable : variables) {
+                    String path = String.format(normalsPathFormat, normalsDir, variable, station.getId());
+                    File test = new File(path);
+                    
+                    if (!test.exists()) {
+                        stations.remove(station);
+                        removalLog.add(String.format(messageFormat, station.getName(), station.getId(), "Normal not found at " + path));
+                        break;                        
+                    }
+                }
+            }
+            
+            
             return this;
         }
 

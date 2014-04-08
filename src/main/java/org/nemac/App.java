@@ -20,6 +20,7 @@ public class App {
 
     private static final boolean filterStations;
     private static final Set<String> minimumVariables = new HashSet<String>();
+    private static final Set<String> normalsVariables = new HashSet<String>();
     private static final String summaryLocation;
     private static final String stationsLocation;
     private static final String prefix;
@@ -38,31 +39,34 @@ public class App {
         // stations should have at least these variables
         minimumVariables.add("TMIN");
         minimumVariables.add("TMAX");
-        minimumVariables.add("PRCP");
-        minimumVariables.add("SNOW");
+        //minimumVariables.add("PRCP");
+        //minimumVariables.add("SNOW");
+        
+        normalsVariables.add("TMIN");
+        normalsVariables.add("TMAX");
 
         // path to stations file
-        stationsLocation = "target/data/stations.json";
+        stationsLocation = "stations.json";
 
         // path to summary file
-        summaryLocation = "target/data/summary.json";
+        summaryLocation = "summary.json";
 
         // station id prefix
         prefix = "GHCND:";
 
         // path for output
-        outputPath = "target/data/";
+        outputPath = "output/";
         
         // NORMALIZER -----------------------
         // should normals be normalized
-        normalize = true;
+        normalize = false;
         
         // path to normals, searches directories recursively for dat files
-        normalsDir = "target/data/normals/";
+        normalsDir = "data/normals/";
         
         // RECURSIVE DELETE -----------------
         // will delete all dat files from the directory
-        recursiveDelete = false;
+        recursiveDelete = true;
         
     }
 
@@ -78,6 +82,7 @@ public class App {
                 StationFilter filter = new StationFilter.Filterer(stations, summary, prefix)
                         .intersectStationNames()
                         .hasAllVariables(minimumVariables)
+                        .hasNormals(normalsVariables, normalsDir)
                         .filter();
 
                 Set<Station> filteredStations = filter.getFilteredStations();
