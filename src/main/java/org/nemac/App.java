@@ -14,6 +14,7 @@ import org.nemac.domain.Translate;
 import org.nemac.normal.Normalizer;
 import org.nemac.station.StationFilter;
 import org.nemac.util.Compression;
+import org.nemac.util.RecursiveUncompress;
 import org.nemac.util.TypeDelete;
 
 public class App {
@@ -30,11 +31,14 @@ public class App {
     private static final String normalsDir;
     
     private static final boolean recursiveDelete;
+    
+    private static final boolean recursiveUncompress;
+    private static final String filesDir;
 
     static {
         // STATION FILTER -------------------
         // should stations be filtered
-        filterStations = true;
+        filterStations = false;
 
         // stations should have at least these variables
         minimumVariables.add("TMIN");
@@ -66,7 +70,14 @@ public class App {
         
         // RECURSIVE DELETE -----------------
         // will delete all dat files from the directory
-        recursiveDelete = true;
+        recursiveDelete = false;
+
+        // RECURSIVE UNCOMPRESS -------------
+        // will delete all dat files from the directory
+        recursiveUncompress = true;
+        
+        // path to dir of compressed files to uncompress
+        filesDir = "output/";
         
     }
 
@@ -110,7 +121,7 @@ public class App {
                     List<String> lines = Normalizer.normalize(f);
                     File outFile = new File(f.getCanonicalPath().substring(0, f.getCanonicalPath().lastIndexOf(".")) + ".csv");
                     FileUtils.writeLines(outFile, lines);
-                    Compression.compress(outFile.getCanonicalPath());
+                    Compression.compress(outFile.getCanonicalPath(), true);
                     count++;
                 }
                 
@@ -121,6 +132,10 @@ public class App {
             
             if (recursiveDelete) {
                 TypeDelete.recursiveDelete(normalsDir, "dat");
+            }
+            
+            if (recursiveUncompress) {
+                RecursiveUncompress.recursiveUncompress(filesDir, "csv.gz");
             }
 
         } catch (IOException ex) {
